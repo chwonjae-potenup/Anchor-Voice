@@ -48,9 +48,9 @@ _load_global_css()
 st.markdown(
     """
     <div class="kb-app-header">
-        <div class="kicker">KB Youth Safe Banking | 10~20 Target</div>
-        <h1>🛡️ 10~20 피싱 안심센터</h1>
-        <p>"나는 안 당한다"는 방심을 깨는 10~20대 특화 피싱 예방 서비스</p>
+        <div class="kicker">SUL-STYLE MOBILE UI · ANCHOR VOICE</div>
+        <h1>🛡️ Anchor Voice 안심뱅킹</h1>
+        <p>동료 UI 톤앤매너(블루 카드/모바일 레이아웃)에 맞춘 피싱 예방 서비스</p>
     </div>
     """,
     unsafe_allow_html=True,

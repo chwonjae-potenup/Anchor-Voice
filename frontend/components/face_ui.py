@@ -19,15 +19,25 @@ from frontend.components.video_capture import frames_to_bytes_list, render_video
 
 
 def render(state) -> None:
-    st.markdown("## 안면 인증")
-    st.markdown("---")
+    st.markdown(
+        """
+        <div class="av-face-hero">
+          <div class="av-face-hero-kicker">FACE AUTH · SAFE TRANSFER</div>
+          <div class="av-face-hero-title">안면 인증으로 본인 여부를 확인합니다</div>
+          <div class="av-face-hero-desc">
+            얼굴 확인과 동작 미션을 통과하면, 위험도에 따라 음성 검증 또는 송금 완료 단계로 이동합니다.
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     score = st.session_state.get("risk_score", 0)
     require_voice = bool(st.session_state.get("require_voice_after_identity", False))
     if require_voice:
-        st.warning(f"위험 점수: **{score}점** - 안면 인증 후 음성(LLM) 검증까지 진행됩니다.")
+        st.info(f"위험 점수 **{score}점**: 안면 인증 후 음성(LLM) 검증까지 진행됩니다.")
     else:
-        st.success(f"위험 점수: **{score}점** - 안면 인증 완료 시 송금을 진행합니다.")
+        st.success(f"위험 점수 **{score}점**: 안면 인증 완료 시 송금 단계로 진행합니다.")
 
     if not os.path.exists("registered_face.jpg"):
         _reset_face_state()
@@ -55,13 +65,23 @@ def render(state) -> None:
             st.session_state.voice_gate_status = "not_required"
             state.go_to("result")
 
-    st.markdown("---")
-    if st.button("비밀번호/공동인증서로 인증하기", key="to_additional_auth"):
+    if st.button("다른 인증수단으로 진행", key="to_additional_auth"):
         _reset_face_state()
         _go_to_additional_auth(state, "안면 인증 대신 추가 인증으로 진행합니다.")
 
 
 def render_registration() -> None:
+    st.markdown(
+        """
+        <div class="av-face-stage-card">
+          <div class="av-face-step-label">Face Register</div>
+          <div class="av-face-step-title">기준 얼굴 등록</div>
+          <div class="av-face-step-subtitle">최초 1회만 등록하면 이후 안면 인증에 사용됩니다.</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
     if os.path.exists("registered_face.jpg"):
         st.success("이미 얼굴이 등록되어 있습니다.")
         if st.button("다시 등록하기 (기존 이미지 삭제)", key="re_register"):
@@ -94,8 +114,16 @@ def render_registration() -> None:
 
 
 def _render_stage1_verify(state) -> None:
-    st.markdown("### 1단계: 얼굴 확인")
-    st.caption("등록된 얼굴과 비교합니다.")
+    st.markdown(
+        """
+        <div class="av-face-stage-card">
+          <div class="av-face-step-label">Step 1</div>
+          <div class="av-face-step-title">얼굴 확인</div>
+          <div class="av-face-step-subtitle">등록된 얼굴 사진과 현재 촬영 이미지를 비교합니다.</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     img = st.camera_input("본인 확인 사진 촬영", key="verify_cam")
     if img is None:
@@ -140,7 +168,16 @@ def _render_stage1_verify(state) -> None:
 
 
 def _render_sequence_challenge(state) -> None:
-    st.markdown("### 2단계: 동작 미션 (영상 분석)")
+    st.markdown(
+        """
+        <div class="av-face-stage-card">
+          <div class="av-face-step-label">Step 2</div>
+          <div class="av-face-step-title">동작 미션 (영상 분석)</div>
+          <div class="av-face-step-subtitle">지시된 2개 동작을 순서대로 수행해 본인임을 추가 확인합니다.</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     if "face_challenge" not in st.session_state:
         with st.spinner("미션 생성 중..."):
