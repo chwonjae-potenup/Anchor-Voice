@@ -1,0 +1,26 @@
+{
+  "description": "정상 이체 시나리오 — 저위험, 모든 앵커 질문 '아니요'",
+  "transfer": {
+    "account_number": "110-123-456789",
+    "amount": 50000,
+    "hour": 14,
+    "is_new_account": false,
+    "is_blacklisted": false,
+    "repeat_attempt_count": 0
+  },
+  "expected_risk": {
+    "risk_score_max": 29,
+    "risk_level": "low"
+  },
+  "answers": [
+    {"question_id": 1, "answer": false},
+    {"question_id": 2, "answer": false},
+    {"question_id": 3, "answer": false},
+    {"question_id": 4, "answer": false},
+    {"question_id": 5, "answer": false}
+  ],
+  "expected_result": {
+    "is_phishing": false,
+    "phishing_type": "normal"
+  }
+}

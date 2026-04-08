@@ -1,0 +1,27 @@
+{
+  "description": "수사기관사칭형 시나리오 — 검찰·경찰 사칭, 안전계좌 이체 지시",
+  "transfer": {
+    "account_number": "555-444-333222",
+    "amount": 5000000,
+    "hour": 15,
+    "is_new_account": true,
+    "is_blacklisted": true,
+    "repeat_attempt_count": 0
+  },
+  "expected_risk": {
+    "risk_score_min": 70,
+    "risk_level": "high"
+  },
+  "answers": [
+    {"question_id": 1, "answer": true,  "note": "서울중앙지검 수사관이라며 안전계좌 이체 지시"},
+    {"question_id": 2, "answer": true,  "note": "지금 안 하면 구속영장 발부된다고 협박"},
+    {"question_id": 3, "answer": true,  "note": "수사 중이니 절대 가족에게 말하지 말라고 함"},
+    {"question_id": 4, "answer": true,  "note": "은행 직원이 물으면 '생활비'라 대답하라고 지시"},
+    {"question_id": 5, "answer": false}
+  ],
+  "expected_result": {
+    "is_phishing": true,
+    "phishing_type": "agency_fraud",
+    "triggered_questions": [1, 2, 3, 4]
+  }
+}

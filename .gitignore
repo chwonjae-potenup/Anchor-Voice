@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Packages
+env/
+.venv/
+venv/
+ENV/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Editor
+.vscode/
+.idea/
+.pytest_cache/
+.mypy_cache/
+*.swp
+Thumbs.db
+.DS_Store
+
+# Data / models / downloads
+downloads/
+data/
+models/
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Environment variables
+.env
+.env.*
+!.env.example

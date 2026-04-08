@@ -1,0 +1,24 @@
+﻿# 기존 프로젝트 requirements와 별도로, 음성 파이프라인 전용 예시입니다.
+# Windows에서도 설치 가능하며, diarization은 선택 사항입니다.
+
+# STT (권장)
+faster-whisper>=1.1.0
+ctranslate2>=4.5.0
+
+# STT fallback (선택)
+openai-whisper>=20250625
+
+# 오디오 로딩/전처리
+ffmpeg-python>=0.2.0
+pydub>=0.25.1
+
+# diarization (선택: pyannote)
+pyannote.audio>=3.3.2
+
+# diarization (선택: NVIDIA NeMo)
+# 설치가 무겁고 환경 의존성이 큽니다.
+omegaconf>=2.3.0
+nemo-toolkit[asr]>=2.2.0
+
+# 기본 유틸
+numpy>=1.26.0

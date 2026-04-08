@@ -1,0 +1,5 @@
+2026-04-07 01:50:35,319 [INFO] backend.main: Anchor-Voice Backend 서버 시작
+INFO:     Started server process [31764]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8011 (Press CTRL+C to quit)

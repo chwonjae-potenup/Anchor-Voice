@@ -1,0 +1,171 @@
+[INFO] 2026-04-01 10:28:24,501 - HTTP Request: GET https://huggingface.co/api/models/Systran/faster-whisper-large-v3/revision/main "HTTP/1.1 200 OK"
+[INFO] 2026-04-01 10:28:24,727 - HTTP Request: HEAD https://huggingface.co/Systran/faster-whisper-large-v3/resolve/edaa852ec7e145841d8ffdb056a99866b5f0a478/config.json "HTTP/1.1 307 Temporary Redirect"
+[INFO] 2026-04-01 10:28:24,740 - HTTP Request: HEAD https://huggingface.co/Systran/faster-whisper-large-v3/resolve/edaa852ec7e145841d8ffdb056a99866b5f0a478/tokenizer.json "HTTP/1.1 307 Temporary Redirect"
+[INFO] 2026-04-01 10:28:24,746 - HTTP Request: HEAD https://huggingface.co/Systran/faster-whisper-large-v3/resolve/edaa852ec7e145841d8ffdb056a99866b5f0a478/preprocessor_config.json "HTTP/1.1 307 Temporary Redirect"
+[INFO] 2026-04-01 10:28:24,749 - HTTP Request: HEAD https://huggingface.co/Systran/faster-whisper-large-v3/resolve/edaa852ec7e145841d8ffdb056a99866b5f0a478/model.bin "HTTP/1.1 302 Found"
+[INFO] 2026-04-01 10:28:24,752 - HTTP Request: HEAD https://huggingface.co/Systran/faster-whisper-large-v3/resolve/edaa852ec7e145841d8ffdb056a99866b5f0a478/vocabulary.json "HTTP/1.1 307 Temporary Redirect"
+[INFO] 2026-04-01 10:28:24,939 - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Systran/faster-whisper-large-v3/edaa852ec7e145841d8ffdb056a99866b5f0a478/config.json "HTTP/1.1 200 OK"
+[INFO] 2026-04-01 10:28:24,943 - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Systran/faster-whisper-large-v3/edaa852ec7e145841d8ffdb056a99866b5f0a478/tokenizer.json "HTTP/1.1 200 OK"
+[INFO] 2026-04-01 10:28:24,964 - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Systran/faster-whisper-large-v3/edaa852ec7e145841d8ffdb056a99866b5f0a478/vocabulary.json "HTTP/1.1 200 OK"
+[INFO] 2026-04-01 10:28:24,969 - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Systran/faster-whisper-large-v3/edaa852ec7e145841d8ffdb056a99866b5f0a478/preprocessor_config.json "HTTP/1.1 200 OK"
+[INFO] 2026-04-01 10:28:24,971 - HTTP Request: GET https://huggingface.co/api/models/Systran/faster-whisper-large-v3/xet-read-token/edaa852ec7e145841d8ffdb056a99866b5f0a478 "HTTP/1.1 200 OK"
+[INFO] 2026-04-01 10:28:25,148 - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/Systran/faster-whisper-large-v3/edaa852ec7e145841d8ffdb056a99866b5f0a478/config.json "HTTP/1.1 200 OK"
+[INFO] 2026-04-01 10:28:25,149 - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/Systran/faster-whisper-large-v3/edaa852ec7e145841d8ffdb056a99866b5f0a478/tokenizer.json "HTTP/1.1 200 OK"
+[INFO] 2026-04-01 10:28:25,172 - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/Systran/faster-whisper-large-v3/edaa852ec7e145841d8ffdb056a99866b5f0a478/preprocessor_config.json "HTTP/1.1 200 OK"
+[INFO] 2026-04-01 10:28:25,175 - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/Systran/faster-whisper-large-v3/edaa852ec7e145841d8ffdb056a99866b5f0a478/vocabulary.json "HTTP/1.1 200 OK"
+[INFO] 2026-04-01 10:33:37,808 - STT backend: faster-whisper (large-v3)
+[WARNING] 2026-04-01 10:33:37,808 - 입력 폴더 없음: 대출사기형
+[WARNING] 2026-04-01 10:33:37,808 - 입력 폴더 없음: 수사기관사칭형
+[WARNING] 2026-04-01 10:33:37,808 - 처리할 오디오 파일이 없습니다.
+[INFO] 2026-04-01 10:38:19,576 - HTTP Request: GET https://huggingface.co/api/models/Systran/faster-whisper-large-v3/revision/main "HTTP/1.1 200 OK"
+[INFO] 2026-04-01 10:38:26,669 - STT backend: faster-whisper (large-v3)
+[INFO] 2026-04-01 10:38:26,698 - 총 412개 파일 처리 시작
+[INFO] 2026-04-01 10:38:26,698 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3
+[INFO] 2026-04-01 10:38:26,926 - Processing audio with duration 01:33.362
+[INFO] 2026-04-01 10:38:27,328 - VAD filter removed 00:14.130 of audio
+[INFO] 2026-04-01 10:38:27,417 - STT 완료(faster-whisper): (1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3 | language=ko prob=1.000
+[INFO] 2026-04-01 10:38:41,959 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(2)_법무사_전산만_확인만_되면_자금_수령_가능하십니다.mp3
+[INFO] 2026-04-01 10:38:42,206 - Processing audio with duration 02:08.052
+[INFO] 2026-04-01 10:38:42,395 - VAD filter removed 00:03.408 of audio
+[INFO] 2026-04-01 10:38:42,472 - STT 완료(faster-whisper): (2)_법무사_전산만_확인만_되면_자금_수령_가능하십니다.mp3 | language=ko prob=1.000
+[INFO] 2026-04-01 10:41:38,383 - HTTP Request: GET https://huggingface.co/api/models/Systran/faster-whisper-large-v3/revision/main "HTTP/1.1 200 OK"
+[INFO] 2026-04-01 10:41:45,427 - STT backend: faster-whisper (large-v3)
+[INFO] 2026-04-01 10:41:45,435 - 총 412개 파일 처리 시작
+[INFO] 2026-04-01 10:41:45,436 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3
+[INFO] 2026-04-01 10:41:45,603 - Processing audio with duration 01:33.362
+[INFO] 2026-04-01 10:41:45,814 - VAD filter removed 00:14.130 of audio
+[INFO] 2026-04-01 10:41:45,860 - STT 완료(faster-whisper): (1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3 | language=ko prob=1.000
+[INFO] 2026-04-01 10:42:00,014 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(2)_법무사_전산만_확인만_되면_자금_수령_가능하십니다.mp3
+[INFO] 2026-04-01 10:42:00,238 - Processing audio with duration 02:08.052
+[INFO] 2026-04-01 10:42:00,437 - VAD filter removed 00:03.408 of audio
+[INFO] 2026-04-01 10:42:00,509 - STT 완료(faster-whisper): (2)_법무사_전산만_확인만_되면_자금_수령_가능하십니다.mp3 | language=ko prob=1.000
+[INFO] 2026-04-01 10:42:21,819 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(3)_송금_시간이_늦어져서_예약_송금_건으로_자금_송금하도록_하겠습니다.mp3
+[INFO] 2026-04-01 10:42:22,124 - Processing audio with duration 03:38.279
+[INFO] 2026-04-01 10:42:22,457 - VAD filter removed 00:11.367 of audio
+[INFO] 2026-04-01 10:42:22,616 - STT 완료(faster-whisper): (3)_송금_시간이_늦어져서_예약_송금_건으로_자금_송금하도록_하겠습니다.mp3 | language=ko prob=1.000
+[INFO] 2026-04-01 10:44:13,349 - HTTP Request: GET https://huggingface.co/api/models/Systran/faster-whisper-large-v3/revision/main "HTTP/1.1 200 OK"
+[INFO] 2026-04-01 10:44:20,222 - STT backend: faster-whisper (large-v3)
+[INFO] 2026-04-01 10:44:20,229 - 총 412개 파일 처리 시작
+[INFO] 2026-04-01 10:44:20,229 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3
+[INFO] 2026-04-01 10:44:20,396 - Processing audio with duration 01:33.362
+[INFO] 2026-04-01 10:44:20,611 - VAD filter removed 00:14.130 of audio
+[INFO] 2026-04-01 10:44:20,658 - STT 완료(faster-whisper): (1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3 | language=ko prob=1.000
+[INFO] 2026-04-01 10:44:34,880 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(2)_법무사_전산만_확인만_되면_자금_수령_가능하십니다.mp3
+[INFO] 2026-04-01 10:44:35,076 - Processing audio with duration 02:08.052
+[INFO] 2026-04-01 10:44:35,270 - VAD filter removed 00:03.408 of audio
+[INFO] 2026-04-01 10:44:35,343 - STT 완료(faster-whisper): (2)_법무사_전산만_확인만_되면_자금_수령_가능하십니다.mp3 | language=ko prob=1.000
+[INFO] 2026-04-01 10:44:56,703 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(3)_송금_시간이_늦어져서_예약_송금_건으로_자금_송금하도록_하겠습니다.mp3
+[INFO] 2026-04-01 10:44:57,017 - Processing audio with duration 03:38.279
+[INFO] 2026-04-01 10:44:57,353 - VAD filter removed 00:11.367 of audio
+[INFO] 2026-04-01 10:44:57,470 - STT 완료(faster-whisper): (3)_송금_시간이_늦어져서_예약_송금_건으로_자금_송금하도록_하겠습니다.mp3 | language=ko prob=1.000
+[INFO] 2026-04-01 10:52:21,509 - STT backend: faster-whisper (large-v3)
+[INFO] 2026-04-01 10:52:47,458 - Note: NumExpr detected 22 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+[INFO] 2026-04-01 10:52:47,458 - NumExpr defaulting to 16 threads.
+[WARNING] 2026-04-01 10:52:56,133 - OneLogger: Setting error_handling_strategy to DISABLE_QUIETLY_AND_REPORT_METRIC_ERROR for rank (rank=0) with OneLogger disabled. To override: explicitly set error_handling_strategy parameter.
+[INFO] 2026-04-01 10:52:56,161 - Final configuration contains 0 exporter(s)
+[WARNING] 2026-04-01 10:52:56,162 - No exporters were provided. This means that no telemetry data will be collected.
+[INFO] 2026-04-01 10:53:10,237 - diarization backend: NVIDIA NeMo (MSDD)
+[INFO] 2026-04-01 10:53:10,245 - 총 412개 파일 처리 시작
+[INFO] 2026-04-01 10:53:10,245 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3
+[INFO] 2026-04-01 10:53:10,616 - Processing audio with duration 01:33.362
+[INFO] 2026-04-01 10:53:10,776 - VAD filter removed 00:14.130 of audio
+[INFO] 2026-04-01 10:53:10,824 - STT 완료(faster-whisper): (1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3 | language=ko prob=1.000
+[WARNING] 2026-04-01 10:53:25,783 - NeMo diarization 실패((1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3): Missing key parameters
+    full_key: diarizer.msdd_model.parameters
+    object_type=dict
+[INFO] 2026-04-01 10:53:25,784 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(2)_법무사_전산만_확인만_되면_자금_수령_가능하십니다.mp3
+[INFO] 2026-04-01 10:53:26,195 - Processing audio with duration 02:08.052
+[INFO] 2026-04-01 10:53:26,390 - VAD filter removed 00:03.408 of audio
+[INFO] 2026-04-01 10:53:26,463 - STT 완료(faster-whisper): (2)_법무사_전산만_확인만_되면_자금_수령_가능하십니다.mp3 | language=ko prob=1.000
+[WARNING] 2026-04-01 10:53:48,691 - NeMo diarization 실패((2)_법무사_전산만_확인만_되면_자금_수령_가능하십니다.mp3): Missing key parameters
+    full_key: diarizer.msdd_model.parameters
+    object_type=dict
+[INFO] 2026-04-01 10:53:48,702 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(3)_송금_시간이_늦어져서_예약_송금_건으로_자금_송금하도록_하겠습니다.mp3
+[INFO] 2026-04-01 10:53:49,197 - Processing audio with duration 03:38.279
+[INFO] 2026-04-01 10:53:49,534 - VAD filter removed 00:11.367 of audio
+[INFO] 2026-04-01 10:53:49,676 - STT 완료(faster-whisper): (3)_송금_시간이_늦어져서_예약_송금_건으로_자금_송금하도록_하겠습니다.mp3 | language=ko prob=1.000
+[INFO] 2026-04-01 10:58:27,243 - STT backend: faster-whisper (large-v3)
+[INFO] 2026-04-01 10:58:30,159 - Note: NumExpr detected 22 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+[INFO] 2026-04-01 10:58:30,159 - NumExpr defaulting to 16 threads.
+[WARNING] 2026-04-01 10:58:31,791 - OneLogger: Setting error_handling_strategy to DISABLE_QUIETLY_AND_REPORT_METRIC_ERROR for rank (rank=0) with OneLogger disabled. To override: explicitly set error_handling_strategy parameter.
+[INFO] 2026-04-01 10:58:31,822 - Final configuration contains 0 exporter(s)
+[WARNING] 2026-04-01 10:58:31,823 - No exporters were provided. This means that no telemetry data will be collected.
+[INFO] 2026-04-01 10:58:33,377 - diarization backend: NVIDIA NeMo (MSDD)
+[INFO] 2026-04-01 10:58:33,384 - 총 412개 파일 처리 시작
+[INFO] 2026-04-01 10:58:33,384 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3
+[INFO] 2026-04-01 10:58:33,713 - Processing audio with duration 01:33.362
+[INFO] 2026-04-01 10:58:33,864 - VAD filter removed 00:14.130 of audio
+[INFO] 2026-04-01 10:58:33,911 - STT 완료(faster-whisper): (1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3 | language=ko prob=1.000
+[WARNING] 2026-04-01 10:58:48,524 - NeMo diarization 실패((1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3): Missing key parameters
+    full_key: diarizer.msdd_model.parameters
+    object_type=dict
+[INFO] 2026-04-01 10:58:48,525 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(2)_법무사_전산만_확인만_되면_자금_수령_가능하십니다.mp3
+[INFO] 2026-04-01 10:58:48,908 - Processing audio with duration 02:08.052
+[INFO] 2026-04-01 10:58:49,092 - VAD filter removed 00:03.408 of audio
+[INFO] 2026-04-01 10:58:49,161 - STT 완료(faster-whisper): (2)_법무사_전산만_확인만_되면_자금_수령_가능하십니다.mp3 | language=ko prob=1.000
+[INFO] 2026-04-01 11:14:24,357 - STT backend: faster-whisper (large-v3)
+[INFO] 2026-04-01 11:14:27,309 - Note: NumExpr detected 22 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+[INFO] 2026-04-01 11:14:27,309 - NumExpr defaulting to 16 threads.
+[WARNING] 2026-04-01 11:14:28,967 - OneLogger: Setting error_handling_strategy to DISABLE_QUIETLY_AND_REPORT_METRIC_ERROR for rank (rank=0) with OneLogger disabled. To override: explicitly set error_handling_strategy parameter.
+[INFO] 2026-04-01 11:14:28,992 - Final configuration contains 0 exporter(s)
+[WARNING] 2026-04-01 11:14:28,992 - No exporters were provided. This means that no telemetry data will be collected.
+[INFO] 2026-04-01 11:14:30,554 - diarization backend: NVIDIA NeMo (MSDD)
+[INFO] 2026-04-01 11:14:30,561 - 총 412개 파일 처리 시작
+[INFO] 2026-04-01 11:14:30,562 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3
+[INFO] 2026-04-01 11:14:30,888 - Processing audio with duration 01:33.362
+[INFO] 2026-04-01 11:14:31,038 - VAD filter removed 00:14.130 of audio
+[INFO] 2026-04-01 11:14:31,087 - STT 완료(faster-whisper): (1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3 | language=ko prob=1.000
+[WARNING] 2026-04-01 11:14:45,619 - NeMo diarization 실패((1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3): Missing key device
+    full_key: device
+    object_type=dict
+[INFO] 2026-04-01 11:14:45,621 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(2)_법무사_전산만_확인만_되면_자금_수령_가능하십니다.mp3
+[INFO] 2026-04-01 11:14:46,008 - Processing audio with duration 02:08.052
+[INFO] 2026-04-01 11:14:46,189 - VAD filter removed 00:03.408 of audio
+[INFO] 2026-04-01 11:14:46,273 - STT 완료(faster-whisper): (2)_법무사_전산만_확인만_되면_자금_수령_가능하십니다.mp3 | language=ko prob=1.000
+[WARNING] 2026-04-01 11:15:08,105 - NeMo diarization 실패((2)_법무사_전산만_확인만_되면_자금_수령_가능하십니다.mp3): Missing key device
+    full_key: device
+    object_type=dict
+[INFO] 2026-04-01 11:15:08,107 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(3)_송금_시간이_늦어져서_예약_송금_건으로_자금_송금하도록_하겠습니다.mp3
+[INFO] 2026-04-01 11:15:08,558 - Processing audio with duration 03:38.279
+[INFO] 2026-04-01 11:15:08,868 - VAD filter removed 00:11.367 of audio
+[INFO] 2026-04-01 11:15:08,988 - STT 완료(faster-whisper): (3)_송금_시간이_늦어져서_예약_송금_건으로_자금_송금하도록_하겠습니다.mp3 | language=ko prob=1.000
+[WARNING] 2026-04-01 11:15:41,811 - NeMo diarization 실패((3)_송금_시간이_늦어져서_예약_송금_건으로_자금_송금하도록_하겠습니다.mp3): Missing key device
+    full_key: device
+    object_type=dict
+[INFO] 2026-04-01 11:15:41,812 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(4)_고객님과_담당자_간_부정대납이_있었던_것을_해결해주셔야_대출이_가능합니다..mp3
+[INFO] 2026-04-01 11:15:42,483 - Processing audio with duration 06:20.996
+[INFO] 2026-04-01 11:15:43,098 - VAD filter removed 00:12.404 of audio
+[INFO] 2026-04-01 11:15:43,349 - STT 완료(faster-whisper): (4)_고객님과_담당자_간_부정대납이_있었던_것을_해결해주셔야_대출이_가능합니다..mp3 | language=ko prob=1.000
+[INFO] 2026-04-01 11:17:54,684 - STT backend: faster-whisper (large-v3)
+[INFO] 2026-04-01 11:17:57,618 - Note: NumExpr detected 22 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+[INFO] 2026-04-01 11:17:57,618 - NumExpr defaulting to 16 threads.
+[WARNING] 2026-04-01 11:17:59,283 - OneLogger: Setting error_handling_strategy to DISABLE_QUIETLY_AND_REPORT_METRIC_ERROR for rank (rank=0) with OneLogger disabled. To override: explicitly set error_handling_strategy parameter.
+[INFO] 2026-04-01 11:17:59,318 - Final configuration contains 0 exporter(s)
+[WARNING] 2026-04-01 11:17:59,319 - No exporters were provided. This means that no telemetry data will be collected.
+[INFO] 2026-04-01 11:18:00,899 - diarization backend: NVIDIA NeMo (MSDD)
+[INFO] 2026-04-01 11:18:00,902 - 총 185개 파일 처리 시작
+[INFO] 2026-04-01 11:18:00,903 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3
+[INFO] 2026-04-01 11:18:01,236 - Processing audio with duration 01:33.362
+[INFO] 2026-04-01 11:18:01,377 - VAD filter removed 00:14.130 of audio
+[INFO] 2026-04-01 11:18:01,423 - STT 완료(faster-whisper): (1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3 | language=ko prob=1.000
+[WARNING] 2026-04-01 11:18:27,046 - NeMo diarization 실패((1)_고객님께_배정된_법무사님께_98만원_송금_부탁드립니다.mp3): Key 'window_length_in_sec' is not in struct
+    full_key: diarizer.vad.parameters.window_length_in_sec
+    object_type=dict
+[INFO] 2026-04-01 11:18:27,047 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(2)_법무사_전산만_확인만_되면_자금_수령_가능하십니다.mp3
+[INFO] 2026-04-01 11:18:27,439 - Processing audio with duration 02:08.052
+[INFO] 2026-04-01 11:18:27,629 - VAD filter removed 00:03.408 of audio
+[INFO] 2026-04-01 11:18:27,708 - STT 완료(faster-whisper): (2)_법무사_전산만_확인만_되면_자금_수령_가능하십니다.mp3 | language=ko prob=1.000
+[WARNING] 2026-04-01 11:18:51,480 - NeMo diarization 실패((2)_법무사_전산만_확인만_되면_자금_수령_가능하십니다.mp3): Key 'window_length_in_sec' is not in struct
+    full_key: diarizer.vad.parameters.window_length_in_sec
+    object_type=dict
+[INFO] 2026-04-01 11:18:51,481 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(3)_송금_시간이_늦어져서_예약_송금_건으로_자금_송금하도록_하겠습니다.mp3
+[INFO] 2026-04-01 11:18:51,970 - Processing audio with duration 03:38.279
+[INFO] 2026-04-01 11:18:52,304 - VAD filter removed 00:11.367 of audio
+[INFO] 2026-04-01 11:18:52,426 - STT 완료(faster-whisper): (3)_송금_시간이_늦어져서_예약_송금_건으로_자금_송금하도록_하겠습니다.mp3 | language=ko prob=1.000
+[WARNING] 2026-04-01 11:19:27,409 - NeMo diarization 실패((3)_송금_시간이_늦어져서_예약_송금_건으로_자금_송금하도록_하겠습니다.mp3): Key 'window_length_in_sec' is not in struct
+    full_key: diarizer.vad.parameters.window_length_in_sec
+    object_type=dict
+[INFO] 2026-04-01 11:19:27,412 - 처리 중: [대출사기형] downloads\fss_audio\대출사기형\(4)_고객님과_담당자_간_부정대납이_있었던_것을_해결해주셔야_대출이_가능합니다..mp3
+[INFO] 2026-04-01 11:19:28,126 - Processing audio with duration 06:20.996
+[INFO] 2026-04-01 11:19:28,755 - VAD filter removed 00:12.404 of audio
+[INFO] 2026-04-01 11:19:29,013 - STT 완료(faster-whisper): (4)_고객님과_담당자_간_부정대납이_있었던_것을_해결해주셔야_대출이_가능합니다..mp3 | language=ko prob=1.000

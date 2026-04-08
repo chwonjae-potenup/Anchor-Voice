@@ -1,0 +1,27 @@
+{
+  "description": "대출사기형 시나리오 — 선입금 유도, 긴급성 압박, 은행 차단",
+  "transfer": {
+    "account_number": "999-888-777666",
+    "amount": 2000000,
+    "hour": 2,
+    "is_new_account": true,
+    "is_blacklisted": false,
+    "repeat_attempt_count": 3
+  },
+  "expected_risk": {
+    "risk_score_min": 70,
+    "risk_level": "high"
+  },
+  "answers": [
+    {"question_id": 1, "answer": false},
+    {"question_id": 2, "answer": true,  "note": "지금 당장 안 보내면 대출 취소된다고 함"},
+    {"question_id": 3, "answer": true,  "note": "가족에게 말하지 말라고 함"},
+    {"question_id": 4, "answer": true,  "note": "은행 직원에게 다른 이유 대라고 지시"},
+    {"question_id": 5, "answer": true,  "note": "선입금 200만 원 요구 (인지세 명목)"}
+  ],
+  "expected_result": {
+    "is_phishing": true,
+    "phishing_type": "loan_fraud",
+    "triggered_questions": [2, 3, 4, 5]
+  }
+}
