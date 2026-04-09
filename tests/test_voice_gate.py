@@ -67,3 +67,26 @@ def test_suspicious_answer_triggers_tail_followup_question():
         "secrecy_isolation",
     }
     assert "직전 답변" in next_q["reason"]
+
+
+def test_final_medium_signal_returns_proceed_with_caution():
+    raw_result = {
+        "is_phishing": True,
+        "confidence": 0.6,
+        "phishing_type": "mixed",
+        "summary": "",
+        "triggered_questions": [2],
+    }
+    log = [
+        {
+            "question_id": 2,
+            "question": "선입금이나 보증금을 요구했나요?",
+            "question_intent": "upfront_fee",
+            "answer_text": "네, 먼저 보내야 대출이 된다고 했어요.",
+        }
+    ]
+
+    gate = decide_voice_gate(raw_result, log, final_step=True)
+
+    assert gate["recommended_action"] == "proceed_with_caution"
+    assert gate["risk_tier"] == "medium"

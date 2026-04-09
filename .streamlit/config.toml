@@ -1,0 +1,9 @@
+[theme]
+base = "light"
+backgroundColor = "white"
+secondaryBackgroundColor = "#1452d9"
+codeBackgroundColor = "powderBlue"
+
+[theme.sidebar]
+backgroundColor = "ghostWhite"
+secondaryBackgroundColor = "#1452d9"

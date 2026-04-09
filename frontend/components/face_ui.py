@@ -33,7 +33,21 @@ def render(state) -> None:
     )
 
     score = st.session_state.get("risk_score", 0)
-    require_voice = bool(st.session_state.get("require_voice_after_identity", False))
+    transfer_data = st.session_state.get("transfer_data", {}) or {}
+    transfer_amount = int(transfer_data.get("amount", 0) or 0)
+    primary_high_amount_trigger = transfer_amount >= 10_000_000
+    require_voice = bool(st.session_state.get("require_voice_after_identity", False)) or primary_high_amount_trigger
+
+    # Defensive hard gate: high-amount transfers must pass voice verification.
+    if primary_high_amount_trigger and not bool(st.session_state.get("require_voice_after_identity", False)):
+        st.session_state.require_voice_after_identity = True
+        st.session_state.transfer_ai_intervention_required = True
+        st.session_state.transfer_primary_high_amount_trigger = True
+        if "1차 트리거: 고액 송금" not in (st.session_state.get("transfer_trigger_reasons") or []):
+            st.session_state.transfer_trigger_reasons = [
+                "1차 트리거: 고액 송금",
+                *(st.session_state.get("transfer_trigger_reasons") or []),
+            ]
     if require_voice:
         st.info(f"위험 점수 **{score}점**: 안면 인증 후 음성(LLM) 검증까지 진행됩니다.")
     else:
@@ -197,9 +211,9 @@ def _render_sequence_challenge(state) -> None:
 
     st.markdown(
         (
-            "<div class='kb-face-instruction' style='color:#f8fafc;'>"
-            "<div class='kb-face-instruction-title' style='color:#e0f2fe;'>지시사항</div>"
-            f"<div style='color:#f8fafc;'>{combined_text}</div>"
+            "<div class='kb-face-instruction' style='background:#eff6ff;border-left:4px solid #2563eb;'>"
+            "<div class='kb-face-instruction-title' style='color:#1d4ed8;'>지시사항</div>"
+            f"<div style='color:#0f172a;'>{combined_text}</div>"
             "</div>"
         ),
         unsafe_allow_html=True,

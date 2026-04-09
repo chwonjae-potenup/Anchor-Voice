@@ -11,7 +11,11 @@ def test_first_question_is_general_transfer_reason():
     assert result["done"] is False
     assert result["question_id"] == 1
     assert result["question_intent"] == "transfer_reason"
-    assert "어떤 사유" in result["question_text"] or "송금하시려는지" in result["question_text"]
+    assert (
+        "어떤 사유" in result["question_text"]
+        or "송금하시려는지" in result["question_text"]
+        or "입금 전에" in result["question_text"]
+    )
 
 
 def test_transfer_reason_routes_to_agency_case_validation():

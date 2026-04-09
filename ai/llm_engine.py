@@ -11,12 +11,20 @@ from pathlib import Path
 from typing import Optional
 
 from ai.anchor_prompts import SYSTEM_PROMPT
+from ai.teammate_llm_adapter import (
+    TEAMMATE_INITIAL_OPENING,
+    analyze_with_teammate_llm,
+    suggest_next_question_with_teammate_llm,
+)
 
 logger = logging.getLogger(__name__)
 
 DEFAULT_MAX_VOICE_QUESTIONS = 5
 FIRST_QUESTION_INTENT = "transfer_reason"
-FIRST_QUESTION_TEXT = "어떤 사유로 송금하시려는지, 상대가 뭐라고 설명했는지 말씀해 주실 수 있을까요?"
+FIRST_QUESTION_TEXT = os.getenv(
+    "VOICE_FIRST_QUESTION_TEXT",
+    TEAMMATE_INITIAL_OPENING,
+)
 
 # 질문 의도(intent)별 템플릿
 INTENT_QUESTION_BANK = {
@@ -263,10 +271,19 @@ def _env_float(name: str, default: float) -> float:
         return default
 
 
+def _env_bool(name: str, default: bool) -> bool:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    return str(raw).strip().lower() in {"1", "true", "yes", "y", "on"}
+
+
 VOICE_BLOCK_CONFIDENCE = _env_float("VOICE_BLOCK_CONFIDENCE", 0.82)
 VOICE_ADDITIONAL_AUTH_CONFIDENCE = _env_float("VOICE_ADDITIONAL_AUTH_CONFIDENCE", 0.55)
 VOICE_INTENT_BLOCK_SCORE = _env_float("VOICE_INTENT_BLOCK_SCORE", 3.0)
 VOICE_INTENT_ADDITIONAL_SCORE = _env_float("VOICE_INTENT_ADDITIONAL_SCORE", 1.5)
+VOICE_USE_TEAMMATE_LLM = _env_bool("VOICE_USE_TEAMMATE_LLM", True)
+VOICE_USE_TEAMMATE_QUESTION_ROUTER = _env_bool("VOICE_USE_TEAMMATE_QUESTION_ROUTER", True)
 
 
 def normalize_age_group(age_group: str | None) -> str:
@@ -470,6 +487,12 @@ def analyze_conversation(conversation_log: list[dict], age_group: str = "unknown
 
     if not conversation_log:
         return _normal_result()
+
+    # 0차: teammate LLM (voice_project sample/genai.py 정책 우선)
+    if VOICE_USE_TEAMMATE_LLM:
+        teammate_result = analyze_with_teammate_llm(conversation_log)
+        if teammate_result:
+            return _apply_age_weight_to_result(teammate_result, normalized_age)
 
     # 1차: Gemini
     gemini_key = os.getenv("GEMINI_API_KEY", "")
@@ -809,7 +832,8 @@ def decide_voice_gate(result: dict, conversation_log: list[dict], final_step: bo
 
     recommended_action:
       - block: phishing high confidence -> stealth/SOS path
-      - additional_auth: suspicious but not fully confirmed -> extra auth required
+      - proceed_with_caution: suspicious but not fully confirmed -> caution banner + re-check guidance
+      - additional_auth: client/server fail-closed fallback path
       - proceed: final step passed
       - pending: continue asking questions
     """
@@ -862,7 +886,7 @@ def decide_voice_gate(result: dict, conversation_log: list[dict], final_step: bo
         if normalized["phishing_type"] in {"normal", "pending", ""} and inferred_type != "normal":
             normalized["phishing_type"] = inferred_type
     elif final_step and medium_signal:
-        recommended_action = "additional_auth"
+        recommended_action = "proceed_with_caution"
         risk_tier = "medium"
         if normalized["phishing_type"] == "pending":
             normalized["phishing_type"] = "mixed"
@@ -877,7 +901,7 @@ def decide_voice_gate(result: dict, conversation_log: list[dict], final_step: bo
         if high_signal:
             normalized["summary"] = "답변에서 피싱 고위험 신호가 확인되어 거래를 차단합니다."
         elif medium_signal:
-            normalized["summary"] = "답변에서 의심 신호가 있어 추가 인증이 필요합니다."
+            normalized["summary"] = "답변에서 의심 신호가 있어 가족/상담센터 재확인 후 진행을 권고합니다."
         else:
             normalized["summary"] = "현재까지는 명확한 피싱 신호가 낮습니다."
 
@@ -930,6 +954,18 @@ def generate_next_question(
             "reason": "첫 질문은 송금 사유를 넓게 파악한 뒤, 답변 단서로 2번 질문부터 분기합니다.",
             "max_questions": safe_max,
         }
+
+    if VOICE_USE_TEAMMATE_LLM and VOICE_USE_TEAMMATE_QUESTION_ROUTER:
+        teammate_question = suggest_next_question_with_teammate_llm(conversation_log)
+        if teammate_question:
+            return {
+                "done": False,
+                "question_id": next_id,
+                "question_text": teammate_question,
+                "question_intent": "",
+                "reason": "동료 LLM 라우터(sample/genai.py)에서 현재 맥락 기준 다음 질문을 생성했습니다.",
+                "max_questions": safe_max,
+            }
 
     asked_intents = _collect_asked_intents(conversation_log)
     selected_intent, followup_reason = _pick_followup_intent_from_latest(conversation_log, asked_intents)

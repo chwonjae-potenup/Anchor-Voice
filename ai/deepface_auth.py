@@ -7,6 +7,7 @@ Policy:
 """
 from __future__ import annotations
 
+import io
 import inspect
 import logging
 import os
@@ -43,7 +44,9 @@ def _face_detector_backends() -> list[str]:
     if raw:
         candidates = [x.strip() for x in raw.split(",") if x.strip()]
     else:
-        candidates = [_face_detector_backend()]
+        # Multi-backend fallback improves detection stability on mobile/low light.
+        preferred = _face_detector_backend().strip() or "opencv"
+        candidates = [preferred, "retinaface", "mediapipe", "ssd"]
 
     # Always include legacy single backend var as fallback to keep compatibility.
     legacy = _face_detector_backend().strip()
@@ -78,7 +81,7 @@ DEFAULT_DISTANCE_THRESHOLDS: dict[tuple[str, str], float] = {
 }
 
 DEFAULT_HARD_MAX_THRESHOLDS: dict[tuple[str, str], float] = {
-    # Conservative, but not over-tight to avoid false rejects for real user.
+    # Conservative strict caps.
     ("vgg-face", "cosine"): 0.56,
     ("vgg-face", "euclidean_l2"): 0.86,
     ("arcface", "cosine"): 0.52,
@@ -102,6 +105,60 @@ def _env_float(name: str, default: float) -> float:
     except ValueError:
         logger.warning("Invalid float env %s=%s, use default %.4f", name, raw, default)
         return default
+
+
+def _env_int(name: str, default: int) -> int:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    try:
+        return int(raw)
+    except ValueError:
+        logger.warning("Invalid int env %s=%s, use default %d", name, raw, default)
+        return default
+
+
+def _normalize_image_bytes_for_face(image_bytes: bytes) -> bytes:
+    """
+    Normalize camera captures for robust face detection:
+    - EXIF orientation fix
+    - RGB conversion
+    - max-side resize
+    - optional low-light brighten
+    """
+    try:
+        from PIL import Image, ImageEnhance, ImageOps, ImageStat
+    except Exception:
+        return image_bytes
+
+    try:
+        with Image.open(io.BytesIO(image_bytes)) as img:
+            img = ImageOps.exif_transpose(img)
+            if img.mode != "RGB":
+                img = img.convert("RGB")
+
+            max_side = max(320, _env_int("DEEPFACE_MAX_SIDE", 1280))
+            w, h = img.size
+            current_max = max(w, h)
+            if current_max > max_side:
+                ratio = max_side / float(current_max)
+                img = img.resize((int(w * ratio), int(h * ratio)), Image.Resampling.LANCZOS)
+
+            if _env_bool("DEEPFACE_AUTO_BRIGHTEN", True):
+                gray_mean = float(ImageStat.Stat(img.convert("L")).mean[0])
+                target = _env_float("DEEPFACE_BRIGHTEN_TARGET", 95.0)
+                if gray_mean < target:
+                    factor = min(1.8, max(1.0, target / max(gray_mean, 1.0)))
+                    img = ImageEnhance.Brightness(img).enhance(factor)
+                    img = ImageEnhance.Contrast(img).enhance(1.05)
+
+            out = io.BytesIO()
+            quality = max(70, min(95, _env_int("DEEPFACE_JPEG_QUALITY", 90)))
+            img.save(out, format="JPEG", quality=quality, optimize=True)
+            return out.getvalue()
+    except Exception as e:
+        logger.info("Face image normalization skipped: %s", e)
+        return image_bytes
 
 
 def _resolve_strict_threshold(model_name: str, distance_metric: str, verify_result: dict) -> float:
@@ -340,10 +397,18 @@ def verify_face_from_bytes(
     distance_metric = _face_distance_metric()
 
     tmp_path = None
+    tmp_registered_path = None
     try:
+        probe_bytes = _normalize_image_bytes_for_face(image_bytes)
+        registered_bytes = _normalize_image_bytes_for_face(Path(registered_image_path).read_bytes())
+
         with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
-            tmp.write(image_bytes)
+            tmp.write(probe_bytes)
             tmp_path = tmp.name
+
+        with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp_registered:
+            tmp_registered.write(registered_bytes)
+            tmp_registered_path = tmp_registered.name
 
         ok, reason, retryable = _extract_faces_with_optional_antispoof(DeepFace, tmp_path)
         if not ok:
@@ -361,7 +426,7 @@ def verify_face_from_bytes(
                 try:
                     result = DeepFace.verify(
                         img1_path=tmp_path,
-                        img2_path=registered_image_path,
+                        img2_path=tmp_registered_path or registered_image_path,
                         model_name=model_name,
                         detector_backend=detector_backend,
                         distance_metric=distance_metric,
@@ -402,7 +467,7 @@ def verify_face_from_bytes(
             try:
                 secondary_result = DeepFace.verify(
                     img1_path=tmp_path,
-                    img2_path=registered_image_path,
+                    img2_path=tmp_registered_path or registered_image_path,
                     model_name=used_model_name,
                     detector_backend=used_detector_backend,
                     distance_metric=secondary_metric,
@@ -420,8 +485,7 @@ def verify_face_from_bytes(
                     and secondary_distance <= secondary_threshold
                 )
             except Exception as e:
-                # If secondary check engine fails, do not allow false accept;
-                # force retry so user stays in face flow.
+                # If secondary check engine fails, do not allow false accept.
                 logger.warning("DeepFace secondary verify failed: %s", e)
                 secondary_verified = False
 
@@ -500,11 +564,17 @@ def verify_face_from_bytes(
                 Path(tmp_path).unlink(missing_ok=True)
             except Exception:
                 pass
+        if tmp_registered_path:
+            try:
+                Path(tmp_registered_path).unlink(missing_ok=True)
+            except Exception:
+                pass
 
 
 def register_face(image_bytes: bytes, save_path: str = REGISTERED_FACE_PATH) -> bool:
     try:
-        Path(save_path).write_bytes(image_bytes)
+        normalized = _normalize_image_bytes_for_face(image_bytes)
+        Path(save_path).write_bytes(normalized)
         logger.info("Face registered: %s", save_path)
         return True
     except Exception as e:

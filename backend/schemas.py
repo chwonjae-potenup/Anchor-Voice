@@ -15,11 +15,18 @@ class TransferRequest(BaseModel):
     is_new_account: bool = Field(False, description="처음 이체하는 계좌 여부")
     is_blacklisted: bool = Field(False, description="블랙리스트 계좌 여부")
     repeat_attempt_count: int = Field(0, description="짧은 시간 내 반복 시도 횟수")
+    recent_call_after: bool = Field(False, description="최근 통화 직후 송금 여부")
+    usual_amount: int = Field(300_000, ge=1, description="평소 송금 금액 기준(원)")
+    usual_hour_start: int = Field(9, ge=0, le=23, description="평소 송금 시간대 시작(시)")
+    usual_hour_end: int = Field(21, ge=0, le=23, description="평소 송금 시간대 종료(시)")
 
 class RiskCheckResponse(BaseModel):
     risk_score: int = Field(..., ge=0, le=100, description="위험도 점수 0~100")
-    risk_level: str = Field(..., description="'low' | 'high'")
+    risk_level: str = Field(..., description="'low' | 'medium' | 'high'")
+    decision_level: str = Field(..., description="'safe' | 'caution' | 'risk'")
     reason: list[str] = Field(default_factory=list, description="위험 요소 목록")
+    ai_intervention_required: bool = Field(False, description="AI 음성 개입 필요 여부")
+    trigger_reasons: list[str] = Field(default_factory=list, description="AI 개입 트리거 근거 목록")
 
 
 # ── 안면 인식 (브라우저 웹캠 → bytes 전달) ───────────────────────────────────
@@ -94,7 +101,7 @@ class PhishingAnalysisResponse(BaseModel):
     triggered_questions: list[int] = Field(default_factory=list)
     recommended_action: str = Field(
         "pending",
-        description="'pending' | 'block' | 'additional_auth' | 'proceed'",
+        description="'pending' | 'block' | 'additional_auth' | 'proceed' | 'proceed_with_caution'",
     )
     risk_tier: str = Field("low", description="'low' | 'medium' | 'high'")
 

@@ -28,6 +28,7 @@ class Settings:
     # LLM
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
+    
 
     # Risk thresholds
     RISK_THRESHOLD_HIGH: int = _env_int("RISK_THRESHOLD_HIGH", 70)

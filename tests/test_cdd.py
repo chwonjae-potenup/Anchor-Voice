@@ -28,14 +28,14 @@ class TestCddScorer:
         assert score >= 70, f"블랙리스트 계좌는 70점 이상이어야 함. 실제: {score}"
 
     def test_multiple_risk_factors_medium_to_high(self):
-        """야간 + 고액 + 신규 계좌 + 반복 → 중간~고위험 (블랙리스트 없이 최대 65점)"""
+        """야간 + 고액 + 신규 계좌 + 반복 + 패턴이탈 → 고위험"""
         score = calculate_risk_score(
             account_info={"is_blacklisted": False, "is_new_account": True},
             transaction_info={"amount": 2_000_000, "hour": 2, "repeat_attempt_count": 3},
         )
-        # 20(신규) + 15(고액) + 10(야간) + 20(반복) = 65점
-        assert score >= 60, f"복합 위험 요소는 60점 이상이어야 함. 실제: {score}"
-        assert score == 65, f"정확한 합산 : 65점 기대. 실제: {score}"
+        # 20(신규) + 15(고액) + 10(야간) + 20(반복) + 15(패턴이탈) = 80점
+        assert score >= 80, f"복합 위험 요소는 80점 이상이어야 함. 실제: {score}"
+        assert score == 80, f"정확한 합산 : 80점 기대. 실제: {score}"
 
 
     def test_max_score_clamp(self):
@@ -53,4 +53,15 @@ class TestCddScorer:
             {"amount": 0, "hour": 12, "repeat_attempt_count": 0},
         )
         assert result.risk_level == "high"
+        assert result.decision_level == "risk"
+        assert result.ai_intervention_required is True
+        assert "고위험 점수 구간" in result.trigger_reasons
         assert len(result.reasons) > 0
+
+    def test_primary_high_amount_trigger_sets_ai_intervention(self):
+        result = evaluate_risk(
+            {"is_blacklisted": False, "is_new_account": False},
+            {"amount": 11_000_000, "hour": 14, "repeat_attempt_count": 0},
+        )
+        assert result.ai_intervention_required is True
+        assert "1차 트리거: 고액 송금" in result.trigger_reasons

@@ -79,8 +79,8 @@ def _render_history(log: list[dict]):
             answer = (item.get("answer_text") or "").strip()
             if answer:
                 st.markdown(
-                    "<div style='background:#1e3a5f;border-radius:8px;"
-                    "padding:0.5rem 1rem;margin:0.3rem 0;color:#90cdf4;'>"
+                    "<div style='background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;"
+                    "padding:0.5rem 1rem;margin:0.3rem 0;color:#1e293b;'>"
                     f"답변: {answer}</div>",
                     unsafe_allow_html=True,
                 )
@@ -97,9 +97,9 @@ def _render_current_question(question: dict, state):
     st.markdown(f"### 질문 {step}")
     st.markdown(
         "<div class='kb-voice-question-card' "
-        "style='background:#2d3748;border-left:4px solid #60a5fa;"
-        "border-radius:10px;padding:1rem;font-size:1.1rem;color:#f8fafc;'>"
-        f"<span style='color:#f8fafc;'>{question['text']}</span></div>",
+        "style='background:#eff6ff;border-left:4px solid #2563eb;"
+        "border-radius:10px;padding:1rem;font-size:1.1rem;color:#0f172a;'>"
+        f"<span style='color:#0f172a;'>{question['text']}</span></div>",
         unsafe_allow_html=True,
     )
     reason = (question.get("reason") or "").strip()
@@ -160,9 +160,9 @@ def _render_answer_confirm(question: dict, answer_text: str, state):
     tts_key = f"tts_played_{step}"
 
     st.markdown(
-        "<div class='kb-voice-answer-card' style='background:#1a202c;border:1px solid #4299e1;"
-        "border-radius:8px;padding:0.8rem 1rem;margin:0.5rem 0;color:#e2e8f0;'>"
-        f"<b style='color:#bfdbfe;'>인식된 답변:</b> <span style='color:#e2e8f0;'>{answer_text}</span></div>",
+        "<div class='kb-voice-answer-card' style='background:#f8fafc;border:1px solid #bfdbfe;"
+        "border-radius:8px;padding:0.8rem 1rem;margin:0.5rem 0;color:#1e293b;'>"
+        f"<b style='color:#1d4ed8;'>인식된 답변:</b> <span style='color:#1e293b;'>{answer_text}</span></div>",
         unsafe_allow_html=True,
     )
 
@@ -256,9 +256,8 @@ def _submit_answer(question: dict, answer_text: str, state):
             "recommended_action": "block",
             "risk_tier": "high",
         }
-        st.session_state.voice_gate_passed = False
-        st.session_state.voice_gate_status = "block"
-        state.go_to("stealth")
+        st.session_state.phishing_result["summary"] = "질문 1에서 기관 이체 지시를 인정해 피싱 위험 알림을 전송합니다."
+        _notify_phishing_risk(state, st.session_state.phishing_result)
         return
 
     log_entry = {
@@ -402,14 +401,13 @@ def _route_by_gate_action(result: dict, state) -> bool:
             action = "pending"
 
     if action == "block":
-        st.session_state.phishing_result = result
-        st.session_state.voice_gate_passed = False
-        st.session_state.voice_gate_status = "block"
-        state.go_to("stealth")
+        _notify_phishing_risk(state, result)
         return True
 
     if action == "additional_auth":
         reason = result.get("summary") or "의심 신호가 있어 추가 인증이 필요합니다."
+        st.session_state.transfer_result_level = "safe"
+        st.session_state.transfer_caution_message = ""
         st.session_state.additional_auth_reason = f"음성 위험 판단 결과: {reason}"
         st.session_state.additional_auth_source = "voice"
         st.session_state.voice_gate_passed = False
@@ -417,8 +415,20 @@ def _route_by_gate_action(result: dict, state) -> bool:
         state.go_to("additional_auth")
         return True
 
+    if action == "proceed_with_caution":
+        caution_message = result.get("summary") or "주의 신호가 있어 가족/상담센터 재확인 후 진행을 권고합니다."
+        st.session_state.auth_method = "음성 질의응답 (주의)"
+        st.session_state.transfer_result_level = "caution"
+        st.session_state.transfer_caution_message = caution_message
+        st.session_state.voice_gate_passed = True
+        st.session_state.voice_gate_status = "proceed_with_caution"
+        state.go_to("result")
+        return True
+
     if action == "proceed":
         st.session_state.auth_method = "음성 질의응답 (LLM/CDD)"
+        st.session_state.transfer_result_level = "safe"
+        st.session_state.transfer_caution_message = ""
         st.session_state.voice_gate_passed = True
         st.session_state.voice_gate_status = "proceed"
         state.go_to("result")
@@ -429,6 +439,21 @@ def _route_by_gate_action(result: dict, state) -> bool:
         st.session_state.voice_gate_status = "pending"
 
     return False
+
+
+def _notify_phishing_risk(state, result: dict) -> None:
+    """
+    Route high-risk voice detections to an explicit risk alert screen.
+    """
+    summary = str(result.get("summary") or "").strip() or "피싱 위험 신호가 감지되어 추가 확인이 필요합니다."
+    st.session_state.phishing_result = result
+    st.session_state.transfer_result_level = "caution"
+    st.session_state.transfer_caution_message = summary
+    st.session_state.additional_auth_reason = f"피싱 위험 신호 감지: {summary}"
+    st.session_state.additional_auth_source = "voice"
+    st.session_state.voice_gate_passed = False
+    st.session_state.voice_gate_status = "risk_alert"
+    state.go_to("additional_auth")
 
 
 def _should_force_block_locally(question: dict, answer_text: str) -> bool:

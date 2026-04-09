@@ -49,6 +49,8 @@ def _complete(state, auth_method: str):
         state.go_to("voice")
         return
     if source == "voice":
+        st.session_state.transfer_result_level = "caution"
+        st.session_state.transfer_caution_message = "음성 검증에서 의심 신호가 있어 추가 인증 후 진행되었습니다."
         st.session_state.voice_gate_passed = True
         st.session_state.voice_gate_status = "additional_auth_passed"
         state.go_to("result")

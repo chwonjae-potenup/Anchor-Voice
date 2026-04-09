@@ -77,12 +77,19 @@ async def risk_check(req: TransferRequest):
             "amount": req.amount,
             "hour": req.hour,
             "repeat_attempt_count": req.repeat_attempt_count,
+            "recent_call_after": req.recent_call_after,
+            "usual_amount": req.usual_amount,
+            "usual_hour_start": req.usual_hour_start,
+            "usual_hour_end": req.usual_hour_end,
         },
     )
     return RiskCheckResponse(
         risk_score=result.score,
         risk_level=result.risk_level,
+        decision_level=result.decision_level,
         reason=result.reasons,
+        ai_intervention_required=result.ai_intervention_required,
+        trigger_reasons=result.trigger_reasons,
     )
 
 

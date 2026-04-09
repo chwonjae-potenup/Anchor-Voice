@@ -7,13 +7,15 @@ from typing import Optional
 
 
 # Plan-defined screen flow:
-# transfer -> face/voice -> additional_auth -> result/stealth
-SCREENS = ["transfer", "face", "voice", "additional_auth", "result", "stealth"]
+# transfer -> face/voice -> additional_auth -> result
+SCREENS = ["transfer", "face", "voice", "additional_auth", "result"]
 SCREEN_ALIASES = {
     "face_auth": "face",
     "voice_auth": "voice",
     "fallback_auth": "additional_auth",
     "extra_auth": "additional_auth",
+    # Backward compatibility for old sessions that still hold "stealth".
+    "stealth": "additional_auth",
 }
 
 
@@ -25,6 +27,12 @@ def init_state():
         "user_age_group": "10~20대",
         "risk_score": None,
         "risk_level": None,
+        "transfer_decision_level": "safe",
+        "transfer_ai_intervention_required": False,
+        "transfer_primary_high_amount_trigger": False,
+        "transfer_trigger_reasons": [],
+        "transfer_result_level": "safe",
+        "transfer_caution_message": "",
         "require_voice_after_identity": False,
         "voice_gate_passed": False,
         "voice_gate_status": None,
@@ -56,7 +64,10 @@ def get_screen() -> str:
 
 def set_transfer_data(account: str, amount: int, hour: int,
                       is_new: bool = False, is_blacklisted: bool = False,
-                      repeat: int = 0):
+                      repeat: int = 0, recent_call_after: bool = False,
+                      usual_amount: int = 300_000,
+                      usual_hour_start: int = 9,
+                      usual_hour_end: int = 21):
     st.session_state.transfer_data = {
         "account_number": account,
         "amount": amount,
@@ -64,6 +75,10 @@ def set_transfer_data(account: str, amount: int, hour: int,
         "is_new_account": is_new,
         "is_blacklisted": is_blacklisted,
         "repeat_attempt_count": repeat,
+        "recent_call_after": recent_call_after,
+        "usual_amount": usual_amount,
+        "usual_hour_start": usual_hour_start,
+        "usual_hour_end": usual_hour_end,
     }
 
 
@@ -77,10 +92,36 @@ def add_answer(question_id: int, answer: bool):
 def reset():
     """거래 완료 후 상태 초기화"""
     for key in [
+        "transfer_step",
+        "transfer_selected_bank",
+        "transfer_selected_bank_widget",
+        "transfer_recipient_account_raw",
+        "transfer_recipient_account_raw_widget",
+        "transfer_recipient_account_validated",
+        "transfer_amount",
+        "transfer_amount_display",
+        "transfer_error",
+        "transfer_notice",
+        "transfer_recent_action_message",
+        "transfer_is_new",
+        "transfer_is_blacklisted",
+        "transfer_recent_call_after",
+        "transfer_usual_amount",
+        "transfer_usual_hour_start",
+        "transfer_usual_hour_end",
+        "transfer_submit_attempt_count",
+        "transfer_ai_popup_open",
+        "transfer_high_amount_reviewed",
         "transfer_data",
         "user_age_group",
         "risk_score",
         "risk_level",
+        "transfer_decision_level",
+        "transfer_ai_intervention_required",
+        "transfer_primary_high_amount_trigger",
+        "transfer_trigger_reasons",
+        "transfer_result_level",
+        "transfer_caution_message",
         "require_voice_after_identity",
         "voice_gate_passed",
         "voice_gate_status",
